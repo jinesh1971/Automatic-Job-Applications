@@ -23,8 +23,9 @@ async function getAIResponse(question, profile) {
 async function applyToJobsWithEasyApply(driver) {
     try {
         await driver.sleep(4000);
-        const jobListingsContainer = await driver.findElement(By.xpath("/html/body/div[5]/div[3]/div[4]/div/div/main/div/div[2]/div[1]/div/ul"));
-        const jobListings = await jobListingsContainer.findElements(By.tagName('li'));
+        // const jobListingsContainer = await driver.findElement(By.xpath("/html/body/div[5]/div[3]/div[4]/div/div/main/div/div[2]/div[1]/div/ul"));
+        // const jobListings = await jobListingsContainer.findElements(By.tagName('li'));
+        let jobListings = await driver.findElements(By.css('li.jobs-search-results__list-item'));
 
         console.log("Number of job listings found on page:", jobListings.length);
 
@@ -33,11 +34,22 @@ async function applyToJobsWithEasyApply(driver) {
             await driver.sleep(4000);
             try {
                 await jobListings[i].click();
-                console.log("About to click EasyApply button, Waiting 5 seconds");
+                // let jobTitleElement = await jobListings[i].findElement(By.css('a.job-card-list__title'));
+                console.log("Waiting 5 seconds, i - ",i);
                 await driver.sleep(5000);
             
-                const easyApplyButton = await driver.findElement(By.xpath("/html/body/div[5]/div[3]/div[4]/div/div/main/div/div[2]/div[2]/div/div[2]/div/div[1]/div/div[1]/div/div[1]/div[1]/div[6]/div/div/div/button"));
-                if (easyApplyButton) {
+                let easyApplyButton;
+
+                try{
+                   easyApplyButton = await driver.findElement(By.xpath("/html/body/div[5]/div[3]/div[4]/div/div/main/div/div[2]/div[2]/div/div[2]/div/div[1]/div/div[1]/div/div[1]/div[1]/div[6]/div/div/div/button"));
+                }
+                catch(error){
+                        console.log("Job either applied or Easy button not available, Continuing with the next job. Waiting 2 seconds");
+                        await driver.sleep(2000);
+                        continue;
+                }
+
+                if (easyApplyButton){
                     await easyApplyButton.click();
 
 
@@ -71,14 +83,13 @@ async function applyToJobsWithEasyApply(driver) {
 
                     await driver.sleep(4000);
                     console.log("Before proceeding to apply next job, waiting 4 seconds.");
-
                 } 
             } catch (err) {
-                console.log('No Easy Apply button or error applying:', err);
+                console.log('Error while applying jobs', err);
             }
         }
     } catch (error) {
-        console.error('Error applying to jobs with Easy Apply:', error);
+        console.error('Error applying to jobs, in function  applyToJobsWithEasyApply', error);
     }
 }
 
@@ -164,18 +175,21 @@ async function clickElement(element) {
     }
 }
 
+async function enterMobileNumber(driver){
+    const mobileNumberInput = await driver.findElement(By.xpath("/html/body/div[3]/div/div/div[2]/div/div[2]/form/div/div/div[4]/div/div/div[1]/div/input"));
+    await mobileNumberInput.clear();
+    await mobileNumberInput.sendKeys(process.env.MOBILE_NUMBER, Key.RETURN);
+    console.log('Mobile number entered successfully, waiting 1 second');
+    await driver.sleep(1000);
+}
+
 async function handleApplyPopup(driver) {
     try {
-        const mobileNumberInput = await driver.findElement(By.xpath("/html/body/div[3]/div/div/div[2]/div/div[2]/form/div/div/div[4]/div/div/div[1]/div/input"));
-        await mobileNumberInput.clear();
-        await mobileNumberInput.sendKeys(process.env.MOBILE_NUMBER, Key.RETURN);
-
-        console.log('Mobile number entered.');
+        enterMobileNumber(driver);
 
         const nextButton = await driver.findElement(By.xpath("/html/body/div[3]/div/div/div[2]/div/div[2]/form/footer/div[2]/button"));
         await nextButton.click();
         console.log('Next button clicked, waiting for 4 seconds');
-
         await driver.sleep(4000);
 
         // If upload resume, then upload resume.
@@ -184,7 +198,7 @@ async function handleApplyPopup(driver) {
         console.log("Uploading resume...wait 3 seconds");
         await driver.sleep(3000);
         await driver.executeScript('arguments[0].style.display = "block";', uploadResumeInput); // Make the input visible if needed
-        await uploadResumeInput.sendKeys('/Users/jineshmodi/Downloads/testResume.pdf');
+        await uploadResumeInput.sendKeys(process.env.RESUME_PATH_NAME);
         console.log("Resume uploaded");
         await driver.sleep(3000);
 
