@@ -1,0 +1,7 @@
+# .gitignore
+*.log
+node_modules/
+temp/
+secret.txt
+*.env
+chrome-profile/
