@@ -174,13 +174,26 @@ async function performJobSearch(driver) {
     }
 }
 
+// async function isLoggedIn(driver) {
+//     try {
+//         // Check if the profile icon or any element unique to a logged-in session is present
+//         const loggedIn = await driver.findElement(By.xpath("/html/body/div[5]/header/div/nav/ul/li[6]/div/button"));
+//         return !!loggedIn;
+//     } catch (error) {
+//         console.log("---------returning error while checking ifLoggedIn",error)
+//         return false;
+//     }
+// }
 async function isLoggedIn(driver) {
     try {
-        // Check if the profile icon or any element unique to a logged-in session is present
-        const loggedIn = await driver.findElement(By.xpath("/html/body/div[5]/header/div/nav/ul/li[6]/div/button"));
+        // Use an explicit wait to wait for the presence of the profile icon or any unique element
+        const loggedIn = await driver.wait(
+            until.elementLocated(By.xpath("/html/body/div[5]/header/div/nav/ul/li[6]/div/button")),
+            10000 // Wait for up to 10 seconds
+        );
         return !!loggedIn;
     } catch (error) {
-        console.log("---------returning error while checking ifLoggedIn",error)
+        console.log("---------Error while checking ifLoggedIn:", error);
         return false;
     }
 }
@@ -190,4 +203,7 @@ async function scrollToElement(driver, locator) {
     await driver.executeScript('arguments[0].scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });', element);
 }
 
-loginAndSearchJobs();
+module.exports = {
+    loginAndSearchJobs
+};
+
