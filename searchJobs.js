@@ -198,8 +198,6 @@ async function isLoggedIn(driver) {
     }
 }
 
-//test 
-
 async function scrollToElement(driver, locator) {
     const element = await driver.findElement(locator);
     await driver.executeScript('arguments[0].scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });', element);
