@@ -22,6 +22,7 @@ Here you can add your entire profile, as brief as possible. Under experience, yo
 
 Don't share this with anyone, as this ChatGPT API key is linked to my personal account, and can be misused if it gets on the dark web.
 
+In Downloads folder, keep a resume named: "testResume.pdf"
 
 **HOW TO RUN?**
 Once all above settings have been understood, in terminal, run this:
