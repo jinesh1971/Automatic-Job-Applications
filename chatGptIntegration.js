@@ -7,9 +7,9 @@ const userProfile = JSON.parse(fs.readFileSync('userProfile.json', 'utf8'));
 
 // Initialize OpenAI client with your API key
 const openai = new OpenAI({
-    apiKey: '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',  // Replace with your actual API key
-    organization: 'org-kggh4KMPp9Fv0fecZA1afuRU',   // Replace with your organization ID
-    project: 'proj_izDc7AkMsxFwV5i5N4fjbuPv'       // Replace with your project ID
+    apiKey: process.env.API_KEY,  // Replace with your actual API key
+    organization: process.env.ORG_KEY,   // Replace with your organization ID
+    project: process.env.PROJ_KEY       // Replace with your project ID
 });
 
 // Function to fetch a chat completion

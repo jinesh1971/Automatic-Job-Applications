@@ -1,4 +1,4 @@
-const { By, Key } = require('selenium-webdriver');
+const { By, Key, until} = require('selenium-webdriver');
 const fs = require('fs');
 const { getChatCompletion } = require('./chatGptIntegration');
 const { OpenAI } = require('openai');
@@ -34,25 +34,41 @@ async function applyToJobsWithEasyApply(driver) {
             await driver.sleep(4000);
             try {
                 await jobListings[i].click();
-                // let jobTitleElement = await jobListings[i].findElement(By.css('a.job-card-list__title'));
-                console.log("Waiting 5 seconds, i - ",i);
-                await driver.sleep(5000);
+                let jobTitleElement;
+                
+                try{
+                    jobTitleElement = await jobListings[i].findElement(By.css('a.job-card-list__title'));
+                    console.log("Waiting 5 seconds, i - ",i," Job title - ",await jobTitleElement.getText());
+                    await driver.sleep(5000);
+                }catch(err){
+                    console.log("Unable to get the job title , error - ",err);
+                    console.log("");
+                }
             
                 let easyApplyButton;
 
-                try{
-                   easyApplyButton = await driver.findElement(By.xpath("/html/body/div[5]/div[3]/div[4]/div/div/main/div/div[2]/div[2]/div/div[2]/div/div[1]/div/div[1]/div/div[1]/div[1]/div[6]/div/div/div/button"));
-                }
-                catch(error){
-                        console.log("Job either applied or Easy button not available, Continuing with the next job. Waiting 2 seconds");
-                        await driver.sleep(2000);
-                        continue;
-                }
+                // try{
+                //    easyApplyButton = await driver.findElement(By.xpath("/html/body/div[5]/div[3]/div[4]/div/div/main/div/div[2]/div[2]/div/div[2]/div/div[1]/div/div[1]/div/div[1]/div[1]/div[6]/div/div/div/button"));
+                // }
+                // catch(error){
+                //         console.log("Job either applied or Easy button not available, Continuing with the next job. Waiting 2 seconds", error);
+                //         await driver.sleep(2000);
+                //         continue;
+                // }
+                try {
+                    await driver.wait(until.elementLocated(By.xpath("//button[contains(@aria-label, 'Easy Apply to')]")), 10000);
+                     easyApplyButton = await driver.findElement(By.xpath("//button[contains(@aria-label, 'Easy Apply to')]"));
 
+                } catch (error) {
+                    console.log("Job either applied or Easy button not available, Continuing with the next job. Waiting 2 seconds", error);
+                    await driver.sleep(2000);
+                    // Continue with the next job...
+                }
+                
                 if (easyApplyButton){
                     await easyApplyButton.click();
-
-
+                    console.log("Easy Apply button clicked.");
+            
                     //Handle pop up for job application
                     await handleApplyPopup(driver);
 
@@ -80,9 +96,8 @@ async function applyToJobsWithEasyApply(driver) {
                     // }                    
 
                     // await clickDismissButton(driver);
-
-                    await driver.sleep(4000);
                     console.log("Before proceeding to apply next job, waiting 4 seconds.");
+                    await driver.sleep(4000);
                 } 
             } catch (err) {
                 console.log('Error while applying jobs', err);
@@ -137,17 +152,19 @@ async function clickDismissButton(driver) {
 }
 
 
-async function handleRadioInput(question, questionText) {
-    try {
-        // Find the radio button with the desired value and click it
-        const answer = await getChatCompletion("Please answer Yes or No: " + questionText);
-        console.log("Radio input - Question:", questionText, " Answer:", answer);
-        const radioButton = await question.findElement(By.css(`input[value='${answer}']`));
-        await clickElement(radioButton); // Click the radio button using the clickElement function
-    } catch (error) {
-        console.error("Error handling radio input:", error);
-    }
-}
+// async function handleRadioInput(question, questionText) {
+//     try {
+//         console.log("inside handleRadioInput, about to get answer from chatgpt")
+//         console.log("questionText - ",questionText)
+//         // Find the radio button with the desired value and click it
+//         const answer = await getChatCompletion("Please answer Yes or No: " + questionText);
+//         console.log("Radio input - Question:", questionText, " Answer:", answer);
+//         const radioButton = await question.findElement(By.css(`input[value='${answer}']`));
+//         await clickElement(radioButton); // Click the radio button using the clickElement function
+//     } catch (error) {
+//         console.error("Error handling radio input:", error);
+//     }
+// }
 
 async function handleTextInput(question, questionText) {
     try {
@@ -175,18 +192,16 @@ async function clickElement(element) {
     }
 }
 
-async function enterMobileNumber(driver){
-    const mobileNumberInput = await driver.findElement(By.xpath("/html/body/div[3]/div/div/div[2]/div/div[2]/form/div/div/div[4]/div/div/div[1]/div/input"));
-    await mobileNumberInput.clear();
-    await mobileNumberInput.sendKeys(process.env.MOBILE_NUMBER, Key.RETURN);
-    console.log('Mobile number entered successfully, waiting 1 second');
-    await driver.sleep(1000);
-}
-
 async function handleApplyPopup(driver) {
     try {
-        enterMobileNumber(driver);
-
+        
+        console.log("trying to get mobile number element");
+        const mobileNumberInput = await driver.findElement(By.xpath("/html/body/div[3]/div/div/div[2]/div/div[2]/form/div/div/div[4]/div/div/div[1]/div/input"));
+        await mobileNumberInput.clear();
+        await mobileNumberInput.sendKeys(process.env.MOBILE_NUMBER, Key.RETURN);
+        console.log('Mobile number entered successfully, waiting 1 second');
+        await driver.sleep(1000);
+        
         const nextButton = await driver.findElement(By.xpath("/html/body/div[3]/div/div/div[2]/div/div[2]/form/footer/div[2]/button"));
         await nextButton.click();
         console.log('Next button clicked, waiting for 4 seconds');
@@ -270,29 +285,31 @@ async function handleApplyPopup(driver) {
             }
             else
             {
-                console.log("-----Checking input");
+                console.log("\n\n-----Checking input type");
                 // Check if the input is a radio button or a text input
                 const inputType = await question.findElement(By.css("input")).getAttribute("type");
-                console.log("input type - ",inputType)
+                console.log("Input type - ",inputType)
+                
                 if (inputType === 'radio') {
-                    // // Find the radio button with the desired value and click it
-                    // const answer  = await getChatCompletion("Please answer Yes or No: "+questionText);   
-                    // console.log("Radio input - Question - ",questionText," answer - ",answer);
-                    // const radioButton = await question.findElement(By.css(`input[value='${answer}']`));
-                    // console.log("question - ",question);
-                    // console.log("radioButton - ",radioButton);
-                    // try{
-                    //     await radioButton.click();
-                    // }catch(error)
-                    // {
-                    //     console.log("first attempt failed! second attempt clicking radio button, for question - ",questionText, " received error - ",error);
-                    //     try{
-                    //         await driver.executeScript("arguments[0].click();", radioButton);
-                    //     }catch(error){
-                    //         console.log("second attempt failed with question - ",questionText," with error - ",error);
-                    //     }
-                    // }
-                    handleRadioInput(question, questionText);
+                
+                    // Find the radio button with the desired value and click it
+                    const answer  = await getChatCompletion("Please answer Yes or No: "+questionText);   
+                    console.log("\nRadio input - Question - ",questionText," answer - ",answer);
+                    const radioButton = await question.findElement(By.css(`input[value='${answer}']`));
+                
+                    console.log("About to click radio button")
+                    try{
+                        await radioButton.click();
+                    }catch(error)
+                    {
+                        console.log("first attempt failed! second attempt clicking radio button, for question - ",questionText, " received error - ",error);
+                        try{
+                            await driver.executeScript("arguments[0].click();", radioButton);
+                        }catch(error){
+                            console.log("second attempt failed with question - ",questionText," with error - ",error);
+                        }
+                    }
+
                 } else if (inputType === 'text') {
                     // // Find the text input and send keys to it
                     // const answer  = await getChatCompletion(questionText);   

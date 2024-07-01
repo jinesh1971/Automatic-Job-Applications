@@ -15,7 +15,13 @@ async function loginAndSearchJobs() {
     try {
         // Set Chrome options
         let options = new chrome.Options();
-        options.addArguments("--no-sandbox");
+        options.addArguments('disable-default-apps');
+        options.addArguments('no-default-browser-check');
+        options.addArguments('disable-popup-blocking');
+        options.addArguments('disable-extensions');
+        options.addArguments('start-maximized');
+        options.addArguments('--disable-notifications');
+        options.addArguments('--disable-plugins');
         options.addArguments('--disable-infobars');
         options.addArguments('--disable-blink-features=AutomationControlled');
         options.addArguments('--disable-dev-shm-usage');
@@ -43,6 +49,7 @@ async function loginAndSearchJobs() {
                 .forBrowser('chrome')
                 .setChromeOptions(options)
                 .build();
+
 
         console.log("START_FROM_RESUME_UPLOAD - ",START_FROM_RESUME_UPLOAD);
         if (START_FROM_RESUME_UPLOAD) {
