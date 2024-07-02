@@ -4,21 +4,23 @@ const { getChatCompletion } = require('./chatGptIntegration');
 const { OpenAI } = require('openai');
 require('dotenv').config();
 
+const JOB_COUNTER = 0;
+
 // Load user profile
-const userProfile = JSON.parse(fs.readFileSync('userProfile.json', 'utf8'));
+// const userProfile = JSON.parse(fs.readFileSync('userProfile.json', 'utf8'));
 
-// Dynamically set the API key without Configuration
-const openai = new OpenAI({ key: process.env.OPENAI_API_KEY });
+// // Dynamically set the API key without Configuration
+// const openai = new OpenAI({ key: process.env.OPENAI_API_KEY });
 
-async function getAIResponse(question, profile) {
-    const prompt = `Given the following user profile, answer the question appropriately:\n\nUser Profile: ${JSON.stringify(profile)}\n\nQuestion: ${question}\n\nAnswer:`;
-    const response = await openai.createCompletion({
-        model: 'gpt-3.5-turbo',
-        prompt: prompt,
-        max_tokens: 50,
-    });
-    return response.data.choices[0].text.trim();
-}
+// async function getAIResponse(question, profile) {
+//     const prompt = `Given the following user profile, answer the question appropriately:\n\nUser Profile: ${JSON.stringify(profile)}\n\nQuestion: ${question}\n\nAnswer:`;
+//     const response = await openai.createCompletion({
+//         model: 'gpt-3.5-turbo',
+//         prompt: prompt,
+//         max_tokens: 50,
+//     });
+//     return response.data.choices[0].text.trim();
+// }
 
 async function applyToJobsWithEasyApply(driver) {
     try {
@@ -30,15 +32,18 @@ async function applyToJobsWithEasyApply(driver) {
         console.log("Number of job listings found on page:", jobListings.length);
 
         for (let i = 0; i < jobListings.length; i++) {
-            console.log("About to begin applying jobs, Wating 4 seconds");
+            // Re-fetch the job listings before interacting to avoid stale element reference
+            jobListings = await driver.findElements(By.css('li.jobs-search-results__list-item'));
+
+            console.log("\nAbout to begin applying jobs, Wating 4 seconds");
             await driver.sleep(4000);
             try {
-                await jobListings[i].click();
+                await jobListings[i+JOB_COUNTER].click();
                 let jobTitleElement;
                 
                 try{
-                    jobTitleElement = await jobListings[i].findElement(By.css('a.job-card-list__title'));
-                    console.log("Waiting 5 seconds, i - ",i," Job title - ",await jobTitleElement.getText());
+                    jobTitleElement = await jobListings[i+JOB_COUNTER].findElement(By.css('a.job-card-list__title'));
+                    console.log("Waiting 5 seconds, i - ",i+JOB_COUNTER," Job title - ",await jobTitleElement.getText());
                     await driver.sleep(5000);
                 }catch(err){
                     console.log("Unable to get the job title , error - ",err);
@@ -60,7 +65,7 @@ async function applyToJobsWithEasyApply(driver) {
                      easyApplyButton = await driver.findElement(By.xpath("//button[contains(@aria-label, 'Easy Apply to')]"));
 
                 } catch (error) {
-                    console.log("Job either applied or Easy button not available, Continuing with the next job. Waiting 2 seconds", error);
+                    console.log("Job either applied or Easy button not available, Continuing with the next job. Waiting 2 seconds");
                     await driver.sleep(2000);
                     // Continue with the next job...
                 }
@@ -73,18 +78,65 @@ async function applyToJobsWithEasyApply(driver) {
                     await handleApplyPopup(driver);
 
                     console.log("About to click review button, waiting 7 seconds");
-                    await driver.sleep(7000);
-                    const reviewButton = await driver.findElement(By.xpath("/html/body/div[3]/div/div/div[2]/div/div[2]/form/footer/div[2]/button[2]"));
-                    reviewButton.click();
+
+                    let reviewButton;
+                    try {
+                        reviewButton = await driver.findElement(By.xpath("/html/body/div[3]/div/div/div[2]/div/div[2]/form/footer/div[2]/button[2]"));
+                        await reviewButton.click();
+                        console.log("Review button clicked, waiting 2 seconds");
+                        await driver.sleep(2000);
+                    } catch (err) {
+                        console.log("Review button not found, skipping to submit button, error - ",err);
+                    }
+
+                    // await driver.sleep(7000);
+                    // reviewButton = await driver.findElement(By.xpath("/html/body/div[3]/div/div/div[2]/div/div[2]/form/footer/div[2]/button[2]"));
+                    // reviewButton.click();
 
                     console.log("About to click submit button, waiting 2 seconds");
                     await driver.sleep(2000);
 
-                    const submitApplicationButton = await driver.findElement(By.xpath("/html/body/div[3]/div/div/div[2]/div/div[2]/div/footer/div[3]/button[2]"));
-                    submitApplicationButton.click();
-                    const afterSubmitCrossButton = await driver.findElement(By.xpath("/html/body/div[3]/div/div/button"));
-                    afterSubmitCrossButton.click();
-                    console.log("Submit button found and clicked, moving on to the next job");
+                    // const submitApplicationButton = await driver.findElement(By.xpath("/html/body/div[3]/div/div/div[2]/div/div[2]/div/footer/div[3]/button[2]"));
+                    // submitApplicationButton.click();
+                    
+                    try {
+                        // Define an array of locators for the submit button
+                        const locators = [
+                            By.xpath("/html/body/div[3]/div/div/div[2]/div/div[2]/div/footer/div[3]/button[2]"), // Original XPath
+                            By.id("ember454"), // ID
+                            By.css(".artdeco-button.artdeco-button--2.artdeco-button--primary"), // CSS selector
+                            By.xpath("//button[@aria-label='Submit application']"), // XPath with aria-label
+                            By.xpath("//button[@aria-label='Submit application' and contains(@class, 'artdeco-button--primary')]"), // More specific XPath with aria-label and class
+                            By.xpath("//button[./span[text()='Submit application']]") // XPath with descendant elements
+                        ];
+                        let elementFound = false;
+                        console.log("Running through locators");
+                        for (let locator of locators) {
+                            try {
+                                const submitButton = await driver.findElement(locator);
+                                await submitButton.click();
+                                elementFound = true;
+                                break; // Exit the loop if the element is found and clicked
+                            } catch (e) {
+                                // Continue to the next locator if this one fails
+                            }
+                        }
+                        if (!elementFound) {
+                            throw new Error("Failed to locate and click the submit button using all provided strategies.");
+                        }
+                    } catch (e) {
+                        console.error("error during submit button event",e);
+                    }
+                    
+                    console.log("Submit button clicked, now going to click the afterSubmitCrossButton, waiting 3 seconds");
+                    await driver.sleep(3000);
+                    try {//ID, CSS selector, aria-label, class name, descendant XPath
+                        await afterSubmitCrossButton(driver,"ember464",".artdeco-modal__dismiss.artdeco-button--circle", "Dismiss", "artdeco-modal__dismiss", "//button[./svg[@data-test-icon='close-medium']]" );
+                        console.log("Cross after submit button clicked successfully");
+                    } catch(e) {
+                        console.log("error during clicking submitCrossButton- ",e)
+                    }
+
                     //While testing
                     // try{
                     //     const crossButton = await driver.findElement(By.xpath("/html/body/div[3]/div/div/button"));
@@ -113,6 +165,116 @@ async function isValidQuestion(text) {
     // For example, check if the text is not too short and doesn't consist of common invalid texts
     var returnValue =  text.length > 5 && !['Yes', 'No', 'Select an option'].includes(text);
     return returnValue;
+}
+
+async function handleMobileInput(driver) {
+    const locators = [
+        By.xpath("/html/body/div[3]/div/div/div[2]/div/div[2]/form/div/div/div[4]/div/div/div[1]/div/input"), // Original XPath
+        By.css("input[id*='phoneNumber-nationalNumber']"), // CSS selector using ID partial match
+        By.css("input[type='text'][required]"), // CSS selector using type and required attributes
+        By.xpath("//input[contains(@id, 'phoneNumber-nationalNumber')]"), // XPath using ID partial match
+        By.xpath("//input[@type='text' and @required]") // XPath using type and required attributes
+    ];
+
+    let elementFound = false;
+    let element;
+
+    for (let locator of locators) {
+        try {
+            await driver.wait(until.elementLocated(locator), 5000); // Wait for the element to be located
+            element = await driver.findElement(locator);
+            elementFound = true;
+            break; // Exit the loop if the element is found
+        } catch (e) {
+            // Continue to the next locator if this one fails
+        }
+    }
+
+    if (!elementFound) {
+        throw new Error("Failed to locate the mobile number input using all provided strategies.");
+    }
+
+    // Re-locate the element before interacting with it to avoid stale element reference error
+    try {
+        await driver.wait(until.elementLocated(By.id("single-line-text-form-component-formElement-urn-li-jobs-applyformcommon-easyApplyFormElement-3941374859-751046301-phoneNumber-nationalNumber")), 5000);
+        element = await driver.findElement(By.id("single-line-text-form-component-formElement-urn-li-jobs-applyformcommon-easyApplyFormElement-3941374859-751046301-phoneNumber-nationalNumber"));
+    } catch (e) {
+        // If re-locating by ID fails, continue to the next locators
+        for (let locator of locators) {
+            try {
+                await driver.wait(until.elementLocated(locator), 5000);
+                element = await driver.findElement(locator);
+                break;
+            } catch (e) {
+                // Continue to the next locator if this one fails
+            }
+        }
+    }
+    await element.clear();
+    await element.sendKeys(process.env.MOBILE_NUMBER, Key.RETURN);
+    console.log("Mobile number entered successfully");
+}
+
+async function afterSubmitCrossButton(driver, id, cssSelector, ariaLabel, className, descendantXPath) {
+    let element;
+
+    try {
+        // Attempt using ID
+        element = await driver.findElement(By.id(id));
+    } catch (e) {
+        try {
+            console.log("Second attempt, trying to find element with css selector");
+            // Attempt using CSS selector
+            element = await driver.findElement(By.css(cssSelector));
+        } catch (e) {
+            try {
+                console.log("Third attempt, trying to find element with xpath aria-label");
+                // Attempt using XPath with aria-label
+                element = await driver.findElement(By.xpath(`//button[@aria-label='${ariaLabel}']`));
+            } catch (e) {
+                try {
+                    console.log("fourth attempt, trying to find element with xpath aria-label and class");
+
+                    // Attempt using more specific XPath with aria-label and class
+                    element = await driver.findElement(By.xpath(`//button[@aria-label='${ariaLabel}' and contains(@class, '${className}')]`));
+                } catch (e) {
+                    try {
+                        console.log("fifth attempt, trying to find element with xpath descendant elements");
+
+                        // Attempt using XPath with descendant elements
+                        element = await driver.findElement(By.xpath(descendantXPath));
+                    } catch (e) {
+                        throw new Error("Failed to locate the element using all provided strategies.");
+                    }
+                }
+            }
+        }
+    }
+    // Re-locate the element before clicking to avoid stale element reference error
+    try {
+        await driver.wait(until.elementLocated(By.id(id)), 5000);
+        element = await driver.findElement(By.id(id));
+    } catch (e) {
+        try {
+            await driver.wait(until.elementLocated(By.css(cssSelector)), 5000);
+            element = await driver.findElement(By.css(cssSelector));
+        } catch (e) {
+            try {
+                await driver.wait(until.elementLocated(By.xpath(`//button[@aria-label='${ariaLabel}']`)), 5000);
+                element = await driver.findElement(By.xpath(`//button[@aria-label='${ariaLabel}']`));
+            } catch (e) {
+                try {
+                    await driver.wait(until.elementLocated(By.xpath(`//button[@aria-label='${ariaLabel}' and contains(@class, '${className}')]`)), 5000);
+                    element = await driver.findElement(By.xpath(`//button[@aria-label='${ariaLabel}' and contains(@class, '${className}')]`));
+                } catch (e) {
+                    await driver.wait(until.elementLocated(By.xpath(descendantXPath)), 5000);
+                    element = await driver.findElement(By.xpath(descendantXPath));
+                }
+            }
+        }
+    }
+
+    await element.click();
 }
 
 
@@ -166,12 +328,15 @@ async function clickDismissButton(driver) {
 //     }
 // }
 
-async function handleTextInput(question, questionText) {
+async function handleTextInput(question, questionText, driver) {
     try {
         // Find the text input and send keys to it
         const answer = await getChatCompletion(questionText);
         console.log("Text input - Question:", questionText, " Answer:", answer);
         const textInput = await question.findElement(By.css("input[type='text']"));
+        //remove any text from the input field
+        textInput.clear();
+        await driver.sleep(1000);
         await textInput.sendKeys(answer);
     } catch (error) {
         console.error("Error handling text input:", error);
@@ -195,12 +360,16 @@ async function clickElement(element) {
 async function handleApplyPopup(driver) {
     try {
         
-        console.log("trying to get mobile number element");
-        const mobileNumberInput = await driver.findElement(By.xpath("/html/body/div[3]/div/div/div[2]/div/div[2]/form/div/div/div[4]/div/div/div[1]/div/input"));
-        await mobileNumberInput.clear();
-        await mobileNumberInput.sendKeys(process.env.MOBILE_NUMBER, Key.RETURN);
-        console.log('Mobile number entered successfully, waiting 1 second');
-        await driver.sleep(1000);
+        console.log("trying to get mobile number element, wait 2 seconds");
+        await driver.sleep(2000);
+        try {
+            await handleMobileInput(driver);
+        } catch (e) {
+            console.error("Error handling apply popup:", e);
+        } 
+
+        console.log('Waiting 2 second');
+        await driver.sleep(2000);
         
         const nextButton = await driver.findElement(By.xpath("/html/body/div[3]/div/div/div[2]/div/div[2]/form/footer/div[2]/button"));
         await nextButton.click();
@@ -223,6 +392,8 @@ async function handleApplyPopup(driver) {
         //Get questions
         const questions = await driver.findElements(By.css(".fb-dash-form-element"));
         for (let question of questions) {
+            console.log("Answering questions... wait 2 seconds");
+            await driver.sleep(2000);
             let questionText = '';
             try {
                 // Try to find question text in different possible elements
@@ -316,7 +487,7 @@ async function handleApplyPopup(driver) {
                     // console.log("Text input - Question - ",questionText," answer - ",answer);
                     // const textInput = await question.findElement(By.css("input[type='text']"));
                     // await textInput.sendKeys(answer);
-                    handleTextInput(question, questionText);
+                    handleTextInput(question, questionText, driver);
 
                 } else {
                     console.log("Unsupported input type: ", inputType);
