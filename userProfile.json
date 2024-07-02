@@ -4,10 +4,15 @@
     "phone": "1234567890",
     "Education": "Bachelor of Computer Science",
     "University": "Memorial University of Newfoundland",
-    "experience": "Started full time work in 2022, at Verafin. Worked in various different teams, currently in latency improvement team. I have worked alongside senior most developers of the company, learned from the very best. I have extensive experience working with Database, frontend nodeJs, backend java, etc. I can create softwares or write quality applications. I started school in Jan 2018 and finished in Dec 2021. Before graduating I received a full time offer already in hand. Dec 2023, I became a senior software developer at Nasdaq. I work with Salesforce, to manage projects and customer cases, my working enviornments is java, marionette js, and node js. Also have angular JS experience, from side projects etc. Have created mobile applications successfully, deployed and launched. Have created online web user authentication web page as a university project, that was used as a bench mark for future student batches. Have interest in picking up new coding languages, learning new technologies. Have experience working with AWS, using pg admin on workspaces, to protect customer data. Creating launching and maintaining instances on aws. I have 4 years of experience working with python, and I do have a driver's license.",
+    "experience": "Started full time work in 2022, at Verafin. Worked in various different teams, currently in endpoint latency improvement team. I have worked alongside senior most developers of the company, learned from the very best. I have extensive experience working with Database, frontend nodeJs, backend java, etc. I can create softwares or write quality applications. I started school in Jan 2018 and finished in Dec 2021. Before graduating I received a full time offer already in hand. Dec 2023, I became a senior software developer at Nasdaq. I work with Salesforce, to manage projects and customer cases, my working enviornments is java, marionette js, and node js. Also have angular JS experience, python, ruby experience from side projects etc. Have created mobile applications successfully, deployed and launched. Have created online web user authentication web page as a university project, that was used as a bench mark for future student batches. Have interest in picking up new coding languages, learning new technologies. Have experience working with AWS, using pg admin on workspaces, to protect customer data. Creating launching and maintaining instances on aws. I have 4 years of experience working with python. I have 4 years of experience with lamda, aws related works. I have experience in azure cloud as well. I have 4 years experience working with SQL, PostgresSQL, databases. I have experience working with Java multi threading for 4 years.",
     "skills": ["JavaScript", "Node.js", "Selenium", "Java"],
     "ResumeUploaded": "yes",
     "relocation": "Yes",
-    "comfortable_working_hybrid": "Yes"
+    "comfortable_working_hybrid": "Yes",
+    "authorized_to_work_in_canada?":"Yes",
+    "Comfortable_to_commute_to_Job_location?":"Yes",
+    "Java_experience":"4 years",
+    "NodeJs_experience":"4 years",
+    "Selenium_experience":"4 years"
     
 }
