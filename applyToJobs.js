@@ -5,6 +5,8 @@ const { OpenAI } = require('openai');
 require('dotenv').config();
 
 const JOB_COUNTER = 0;
+const JOB_LISTINGS_NOT_APPLIED = 'job_listings_not_applied.txt';
+var NEED_REFRESH = false;
 
 // Load user profile
 // const userProfile = JSON.parse(fs.readFileSync('userProfile.json', 'utf8'));
@@ -21,6 +23,16 @@ const JOB_COUNTER = 0;
 //     });
 //     return response.data.choices[0].text.trim();
 // }
+
+// Function to append URL to the file
+async function saveUrlToFile(url) {
+    return new Promise((resolve, reject) => {
+        fs.appendFile(JOB_LISTINGS_NOT_APPLIED, `${url}\n`, (err) => {
+            if (err) reject(err);
+            resolve();
+        });
+    });
+}
 
 async function applyToJobsWithEasyApply(driver) {
     try {
@@ -52,14 +64,6 @@ async function applyToJobsWithEasyApply(driver) {
             
                 let easyApplyButton;
 
-                // try{
-                //    easyApplyButton = await driver.findElement(By.xpath("/html/body/div[5]/div[3]/div[4]/div/div/main/div/div[2]/div[2]/div/div[2]/div/div[1]/div/div[1]/div/div[1]/div[1]/div[6]/div/div/div/button"));
-                // }
-                // catch(error){
-                //         console.log("Job either applied or Easy button not available, Continuing with the next job. Waiting 2 seconds", error);
-                //         await driver.sleep(2000);
-                //         continue;
-                // }
                 try {
                     await driver.wait(until.elementLocated(By.xpath("//button[contains(@aria-label, 'Easy Apply to')]")), 10000);
                      easyApplyButton = await driver.findElement(By.xpath("//button[contains(@aria-label, 'Easy Apply to')]"));
@@ -76,6 +80,12 @@ async function applyToJobsWithEasyApply(driver) {
             
                     //Handle pop up for job application
                     await handleApplyPopup(driver);
+                    
+                    if (NEED_REFRESH){
+                        // Refresh the browser
+                        await driver.navigate().refresh();
+                        NEED_REFRESH = false;
+                    }
 
                     console.log("About to click review button, waiting 7 seconds");
 
@@ -89,31 +99,25 @@ async function applyToJobsWithEasyApply(driver) {
                         console.log("Review button not found, skipping to submit button, error - ",err);
                     }
 
-                    // await driver.sleep(7000);
-                    // reviewButton = await driver.findElement(By.xpath("/html/body/div[3]/div/div/div[2]/div/div[2]/form/footer/div[2]/button[2]"));
-                    // reviewButton.click();
-
                     console.log("About to click submit button, waiting 2 seconds");
                     await driver.sleep(2000);
 
-                    // const submitApplicationButton = await driver.findElement(By.xpath("/html/body/div[3]/div/div/div[2]/div/div[2]/div/footer/div[3]/button[2]"));
-                    // submitApplicationButton.click();
-                    
+                  
                     try {
-                        // Define an array of locators for the submit button
                         const locators = [
-                            By.xpath("/html/body/div[3]/div/div/div[2]/div/div[2]/div/footer/div[3]/button[2]"), // Original XPath
-                            By.id("ember454"), // ID
-                            By.css(".artdeco-button.artdeco-button--2.artdeco-button--primary"), // CSS selector
-                            By.xpath("//button[@aria-label='Submit application']"), // XPath with aria-label
-                            By.xpath("//button[@aria-label='Submit application' and contains(@class, 'artdeco-button--primary')]"), // More specific XPath with aria-label and class
-                            By.xpath("//button[./span[text()='Submit application']]") // XPath with descendant elements
+                            By.xpath("//button[@aria-label='Submit application' and contains(@class, 'artdeco-button--primary')]"),
+                            By.xpath("//button[normalize-space() = 'Submit application']"),
+                            // By.css(".artdeco-button.artdeco-button--2.artdeco-button--primary"),
+                            By.xpath("//button[./span[text()='Submit application']]"),
+                            By.id("ember928")
                         ];
+
                         let elementFound = false;
                         console.log("Running through locators");
                         for (let locator of locators) {
-                            try {
+                            try {                            
                                 const submitButton = await driver.findElement(locator);
+                                console.log("locator - ", locator);
                                 await submitButton.click();
                                 elementFound = true;
                                 break; // Exit the loop if the element is found and clicked
@@ -417,13 +421,18 @@ async function handleApplyPopup(driver) {
                         if (!(await isValidQuestion(questionText))) throw new Error("Invalid question text in span");
                     } catch (e) {
                         console.log("Unable to find valid question text for this element.");
-                        continue;
+                        const currentUrl = await driver.getCurrentUrl();
+                        await saveUrlToFile(currentUrl);
+                        console.log(`URL saved in file ${JOB_LISTINGS_NOT_APPLIED} : URL -  ${currentUrl}`);
+                        NEED_REFRESH = true;
+                        return;
                     }
                 }
             }         
         
             const selectElements = await question.findElements(By.css("select"));            
             if (selectElements.length>0){
+                console.log("Input type - Select! Question - ",questionText);
                 const dropdown = selectElements[0];
                 
                 // Get all available options
@@ -438,7 +447,7 @@ async function handleApplyPopup(driver) {
                 }
 
                  // Prepare the question for ChatGPT
-                 const questionWithOptions = `which of the following options is the most suitable? Options: ${optionsText.join(', ')}`;
+                 const questionWithOptions = `Question - ${questionText} | which of the following options is the most suitable ? Options: ${optionsText.join(', ')}`;
                  console.log("sending question: ",questionWithOptions)
                  
                  // Get the best option from ChatGPT
@@ -487,7 +496,7 @@ async function handleApplyPopup(driver) {
                     // console.log("Text input - Question - ",questionText," answer - ",answer);
                     // const textInput = await question.findElement(By.css("input[type='text']"));
                     // await textInput.sendKeys(answer);
-                    handleTextInput(question, questionText, driver);
+                    await handleTextInput(question, questionText, driver);
 
                 } else {
                     console.log("Unsupported input type: ", inputType);
