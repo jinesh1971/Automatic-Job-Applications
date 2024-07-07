@@ -1,11 +1,14 @@
 const { By, Key, until} = require('selenium-webdriver');
 const fs = require('fs');
 const { getChatCompletion } = require('./chatGptIntegration');
+const util = require('util');
 const { OpenAI } = require('openai');
 require('dotenv').config();
 
 const JOB_COUNTER = 10;
 const JOB_LISTINGS_NOT_APPLIED = 'job_listings_not_applied.txt';
+const LOG_FILE = 'log_file.txt';
+const QUESTIONS_RECEIVED = 'questions_received.txt';
 var NEED_REFRESH = false;
 
 // Function to append URL to the file
@@ -302,9 +305,9 @@ async function clickDismissButton(driver) {
 
 async function handleTextInput(question, questionText, driver) {
     try {
-
-        const isNumeric = await isNumericInput(question) || 
-                    ['How many', 'number', 'years of work experience'].some(keyword => labelText.includes(keyword));
+        console.log("Inside handleTextInput function");
+        const isNumeric = await isNumericInput(question, driver) || 
+                    ['How many', 'number', 'years of work experience'].some(keyword => questionText.includes(keyword));
 
         // Find the text input and send keys to it
         const answer = await getChatCompletion(questionText);
@@ -346,8 +349,11 @@ async function isNumericInput(questionElement, driver) {
   function validateAnswer(answer, isNumeric) {
     if (isNumeric) {
       const cleanedAnswer = answer.replace(/[^\d.-]/g, '');
-      return !isNaN(parseFloat(cleanedAnswer)) ? cleanedAnswer : null;
+      let returnValue =  !isNaN(parseFloat(cleanedAnswer)) ? cleanedAnswer : null;
+      console.log("ValidateAnswer return value - ", returnValue);
+      return returnValue;
     }
+    console.log("ValidateAnswer return value - ", answer);
     return answer;
   }
 
@@ -364,6 +370,55 @@ async function clickElement(element) {
         }
     }
 }
+
+// Promisify the readFile and writeFile functions
+const readFileAsync = util.promisify(fs.readFile);
+const writeFileAsync = util.promisify(fs.writeFile);
+
+// Function to append question to the file
+async function appendQuestionToFile(questionText, filePath) {
+  try {
+    console.log(`Attempting to read file: ${filePath}`);
+    
+    let content;
+    try {
+      content = await readFileAsync(filePath, 'utf8');
+      console.log('File content read successfully.');
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        console.log('File does not exist. Initializing new content.');
+        content = '';
+      } else {
+        throw error;
+      }
+    }
+
+    // Split content into lines and determine if the question is already present
+    const lines = content.trim().split('\n');
+    const questionAlreadyExists = lines.some(line => line.includes(questionText));
+
+    // If the question is already present, do not append it
+    if (questionAlreadyExists) {
+      console.log(`Question "${questionText}" is already present in the file.`);
+      return;
+    }
+
+    // Determine the next question number
+    const nextQuestionNumber = lines.length + 1;
+
+    // Append the new question to the content
+    const newContent = `${content}\n${nextQuestionNumber}. ${questionText}`.trim();
+
+    console.log(`Appending new question: ${nextQuestionNumber}. ${questionText}`);
+    await writeFileAsync(filePath, newContent, 'utf8');
+    console.log(`Question "${questionText}" has been added to the file.`);
+  } catch (err) {
+    console.error('Error appending question to file:', err);
+  }
+}
+  
+  
+  
 
 async function handleApplyPopup(driver) {
     try {
@@ -407,6 +462,8 @@ async function handleApplyPopup(driver) {
                 // Try to find question text in different possible elements
                 const label = await question.findElement(By.css("label"));
                 questionText = await label.getText();
+                
+                await appendQuestionToFile(questionText, QUESTIONS_RECEIVED);
                 
                 if (!(await isValidQuestion(questionText))){
                     console.log("Invalid")

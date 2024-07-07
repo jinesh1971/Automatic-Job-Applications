@@ -1,0 +1,19 @@
+2. Depuis combien d’années utilisez-vous Java ?
+2. Depuis combien d’années utilisez-vous JIRA ?
+3. Depuis combien d’années utilisez-vous Framework Spring ?
+4. Oui
+5. Quel est votre niveau en Français ?
+6. How many years of work experience do you have with C++?
+7. How many years of work experience do you have with Embedded C++?
+8. How many years of work experience do you have with Agile Environment?
+9. How many years of work experience do you have with Jakarta EE?
+10. Yes
+11. How many years of work experience do you have with OnBase API and API integration?
+12. How many years of work experience do you have with OnBase ECM?
+13. How many years of work experience do you have with Microservice Architecture and designing Microservices for event-based solutions?
+14. How many years of work experience do you have with Java J2EE Application Development?
+How many years of work experience do you have with Java J2EE Application Development?
+16. How many years of work experience do you have with Cloud Deployments and Application Integration?
+17. How many years of work experience do you have with different Cloud Platforms like Microsoft Azure/Google Cloud Platform (GCP)/Amazon Web Services (AWS)?
+18. How many years of work experience do you have with .NET Application Development / .NET Framework?
+19. How many years of work experience do you have with End-to-End SDLC, including go-live and post-production software/application support?
