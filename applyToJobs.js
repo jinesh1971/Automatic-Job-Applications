@@ -4,25 +4,9 @@ const { getChatCompletion } = require('./chatGptIntegration');
 const { OpenAI } = require('openai');
 require('dotenv').config();
 
-const JOB_COUNTER = 0;
+const JOB_COUNTER = 10;
 const JOB_LISTINGS_NOT_APPLIED = 'job_listings_not_applied.txt';
 var NEED_REFRESH = false;
-
-// Load user profile
-// const userProfile = JSON.parse(fs.readFileSync('userProfile.json', 'utf8'));
-
-// // Dynamically set the API key without Configuration
-// const openai = new OpenAI({ key: process.env.OPENAI_API_KEY });
-
-// async function getAIResponse(question, profile) {
-//     const prompt = `Given the following user profile, answer the question appropriately:\n\nUser Profile: ${JSON.stringify(profile)}\n\nQuestion: ${question}\n\nAnswer:`;
-//     const response = await openai.createCompletion({
-//         model: 'gpt-3.5-turbo',
-//         prompt: prompt,
-//         max_tokens: 50,
-//     });
-//     return response.data.choices[0].text.trim();
-// }
 
 // Function to append URL to the file
 async function saveUrlToFile(url) {
@@ -36,9 +20,8 @@ async function saveUrlToFile(url) {
 
 async function applyToJobsWithEasyApply(driver) {
     try {
+        console.log("Beginning of EasyToApply function, waiting 4 seconds");
         await driver.sleep(4000);
-        // const jobListingsContainer = await driver.findElement(By.xpath("/html/body/div[5]/div[3]/div[4]/div/div/main/div/div[2]/div[1]/div/ul"));
-        // const jobListings = await jobListingsContainer.findElements(By.tagName('li'));
         let jobListings = await driver.findElements(By.css('li.jobs-search-results__list-item'));
 
         console.log("Number of job listings found on page:", jobListings.length);
@@ -317,35 +300,56 @@ async function clickDismissButton(driver) {
     }
 }
 
-
-// async function handleRadioInput(question, questionText) {
-//     try {
-//         console.log("inside handleRadioInput, about to get answer from chatgpt")
-//         console.log("questionText - ",questionText)
-//         // Find the radio button with the desired value and click it
-//         const answer = await getChatCompletion("Please answer Yes or No: " + questionText);
-//         console.log("Radio input - Question:", questionText, " Answer:", answer);
-//         const radioButton = await question.findElement(By.css(`input[value='${answer}']`));
-//         await clickElement(radioButton); // Click the radio button using the clickElement function
-//     } catch (error) {
-//         console.error("Error handling radio input:", error);
-//     }
-// }
-
 async function handleTextInput(question, questionText, driver) {
     try {
+
+        const isNumeric = await isNumericInput(question) || 
+                    ['How many', 'number', 'years of work experience'].some(keyword => labelText.includes(keyword));
+
         // Find the text input and send keys to it
         const answer = await getChatCompletion(questionText);
-        console.log("Text input - Question:", questionText, " Answer:", answer);
+        
+        let validAnswer = validateAnswer(answer, isNumeric);
+
+        while (validAnswer === null) {
+            answer = await getChatCompletion(questionText);
+            validAnswer = validateAnswer(answer, isNumeric);
+          }
+
+        console.log("Text input - Question:", questionText, " Answer:", validAnswer);
         const textInput = await question.findElement(By.css("input[type='text']"));
         //remove any text from the input field
         textInput.clear();
         await driver.sleep(1000);
-        await textInput.sendKeys(answer);
+        await textInput.sendKeys(validAnswer);
     } catch (error) {
         console.error("Error handling text input:", error);
     }
 }
+
+async function isNumericInput(questionElement, driver) {
+    const ariaDescribedby = await questionElement.getAttribute('aria-describedby');
+    await driver.sleep(1000);
+    if (ariaDescribedby) {
+      try {
+        const descriptionElement = await driver.findElement(By.id(ariaDescribedby));
+        await driver.sleep(1000);
+        const descriptionText = await descriptionElement.getText();
+        return /whole number|numeric|between/.test(descriptionText);
+      } catch (err) {
+        console.error('Error in function, isNumericInput, finding description element:', err);
+      }
+    }
+    return false;
+  }
+
+  function validateAnswer(answer, isNumeric) {
+    if (isNumeric) {
+      const cleanedAnswer = answer.replace(/[^\d.-]/g, '');
+      return !isNaN(parseFloat(cleanedAnswer)) ? cleanedAnswer : null;
+    }
+    return answer;
+  }
 
 async function clickElement(element) {
     try {
@@ -491,11 +495,7 @@ async function handleApplyPopup(driver) {
                     }
 
                 } else if (inputType === 'text') {
-                    // // Find the text input and send keys to it
-                    // const answer  = await getChatCompletion(questionText);   
-                    // console.log("Text input - Question - ",questionText," answer - ",answer);
-                    // const textInput = await question.findElement(By.css("input[type='text']"));
-                    // await textInput.sendKeys(answer);
+                    
                     await handleTextInput(question, questionText, driver);
 
                 } else {
