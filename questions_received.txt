@@ -19,11 +19,7 @@
 19. Depuis combien d’années utilisez-vous Spring Boot ?
 20. Depuis combien d’années utilisez-vous Amazon Web Services ?
 21. Quel est votre niveau en Français ?
-Quel est votre niveau en Français ?
-23. Quel est votre niveau en Anglais ?
-Quel est votre niveau en Anglais ?
-25. Présence au bureau 2 jours semaine à Montréal ?
-Présence au bureau 2 jours semaine à Montréal ?
+22. Présence au bureau 2 jours semaine à Montréal ?
 27. How many years of work experience do you have with Snowflake Cloud?
 28. How many years of work experience do you have with Google Cloud Platform (GCP)?
 29. How many years of work experience do you have with Amazon Web Services (AWS)?
@@ -49,6 +45,12 @@ Are you open to a hybrid job environment out of Ottawa, ON?
 49. How many years of work experience do you have with Java?
 50. Depuis combien d’années utilisez-vous DevOps ?
 51. Quel est votre niveau en Français ?
-Quel est votre niveau en Français ?
-53. Quel est votre niveau en Anglais ?
-Quel est votre niveau en Anglais ?
+52. Quel est votre niveau en Anglais ?
+49. Depuis combien d’années utilisez-vous COBOL ?
+50. Combien d’années d’expérience avez-vous en tant que Technologies de l’information ?
+51. How many years of work experience do you have with Spring Framework?
+52. How many years of work experience do you have with Angular?
+53. Depuis combien d’années utilisez-vous Microservices ?
+54. Depuis combien d’années utilisez-vous Apache ?
+55. How many years of work experience do you have with PostgreSQL?
+56. How many years of work experience do you have with Databases?

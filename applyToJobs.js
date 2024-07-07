@@ -462,9 +462,15 @@ async function handleApplyPopup(driver) {
 
         const nextButtonAfterResume = await driver.findElement(By.xpath("/html/body/div[3]/div/div/div[2]/div/div[2]/form/footer/div[2]/button[2]"));
         await nextButtonAfterResume.click();
-
+        
+        var questions;
         //Get questions
-        const questions = await driver.findElements(By.css(".fb-dash-form-element"));
+        try{
+            questions =  await driver.findElements(By.css(".fb-dash-form-element"));
+            console.log("\nReceived questions successfully\n")
+        }catch(err){
+            console.log("\nError getting questions: ",err)
+        }
         for (let question of questions) {
             console.log("Answering questions... wait 2 seconds");
             await driver.sleep(2000);
