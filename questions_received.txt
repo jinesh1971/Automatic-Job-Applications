@@ -12,8 +12,43 @@
 12. How many years of work experience do you have with OnBase ECM?
 13. How many years of work experience do you have with Microservice Architecture and designing Microservices for event-based solutions?
 14. How many years of work experience do you have with Java J2EE Application Development?
-How many years of work experience do you have with Java J2EE Application Development?
-16. How many years of work experience do you have with Cloud Deployments and Application Integration?
-17. How many years of work experience do you have with different Cloud Platforms like Microsoft Azure/Google Cloud Platform (GCP)/Amazon Web Services (AWS)?
-18. How many years of work experience do you have with .NET Application Development / .NET Framework?
-19. How many years of work experience do you have with End-to-End SDLC, including go-live and post-production software/application support?
+15. How many years of work experience do you have with Cloud Deployments and Application Integration?
+16. How many years of work experience do you have with different Cloud Platforms like Microsoft Azure/Google Cloud Platform (GCP)/Amazon Web Services (AWS)?
+17. How many years of work experience do you have with .NET Application Development / .NET Framework?
+18. How many years of work experience do you have with End-to-End SDLC, including go-live and post-production software/application support?
+19. Depuis combien d’années utilisez-vous Spring Boot ?
+20. Depuis combien d’années utilisez-vous Amazon Web Services ?
+21. Quel est votre niveau en Français ?
+Quel est votre niveau en Français ?
+23. Quel est votre niveau en Anglais ?
+Quel est votre niveau en Anglais ?
+25. Présence au bureau 2 jours semaine à Montréal ?
+Présence au bureau 2 jours semaine à Montréal ?
+27. How many years of work experience do you have with Snowflake Cloud?
+28. How many years of work experience do you have with Google Cloud Platform (GCP)?
+29. How many years of work experience do you have with Amazon Web Services (AWS)?
+30. How many years of work experience do you have with AUTOSAR?
+31. How many years of work experience do you have with MATLAB?
+32. How many years of work experience do you have with Simulink?
+33. How many years of work experience do you have with Linux?
+34. How many years of work experience do you have with Operating Systems?
+35. How many years of work experience do you have with Python (Programming Language)?
+36. Are you legally entitled to work in Canada?
+Are you legally entitled to work in Canada?
+38. What are your hourly rate expectations?
+What are your hourly rate expectations?
+40. Are you open to a 12-month contract structure?
+Are you open to a 12-month contract structure?
+42. Are you willing to complete an online IKM Assessment as a mandatory portion of the application process (usually takes 1hr-1.5hrs to complete)? It is an Embedded C multiple choice test.
+Are you willing to complete an online IKM Assessment as a mandatory portion of the application process (usually takes 1hr-1.5hrs to complete)? It is an Embedded C multiple choice test.
+44. Are you open to a hybrid job environment out of Ottawa, ON?
+Are you open to a hybrid job environment out of Ottawa, ON?
+46. How many years of work experience do you have with SQL Server Integration Services (SSIS)?
+47. How many years of work experience do you have with Performance Tuning?
+48. How many years of work experience do you have with Guidewire?
+49. How many years of work experience do you have with Java?
+50. Depuis combien d’années utilisez-vous DevOps ?
+51. Quel est votre niveau en Français ?
+Quel est votre niveau en Français ?
+53. Quel est votre niveau en Anglais ?
+Quel est votre niveau en Anglais ?
