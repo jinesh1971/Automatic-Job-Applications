@@ -103,7 +103,6 @@ async function applyToJobsWithEasyApply(driver) {
                         for (let locator of locators) {
                             try {                            
                                 const submitButton = await driver.findElement(locator);
-                                console.log("locator - ", locator);
                                 await submitButton.click();
                                 elementFound = true;
                                 break; // Exit the loop if the element is found and clicked
@@ -312,11 +311,11 @@ async function handleTextInput(question, questionText, driver) {
         // Find the text input and send keys to it
         const answer = await getChatCompletion(questionText);
         
-        let validAnswer = validateAnswer(answer, isNumeric);
+        let validAnswer = validateAnswerForNumeric(answer, isNumeric);
 
         while (validAnswer === null) {
             answer = await getChatCompletion(questionText);
-            validAnswer = validateAnswer(answer, isNumeric);
+            validAnswer = validateAnswerForNumeric(answer, isNumeric);
           }
 
         console.log("Text input - Question:", questionText, " Answer:", validAnswer);
@@ -346,7 +345,7 @@ async function isNumericInput(questionElement, driver) {
     return false;
   }
 
-  function validateAnswer(answer, isNumeric) {
+  function validateAnswerForNumeric(answer, isNumeric) {
     if (isNumeric) {
       const cleanedAnswer = answer.replace(/[^\d.-]/g, '');
       let returnValue =  !isNaN(parseFloat(cleanedAnswer)) ? cleanedAnswer : null;
@@ -355,6 +354,18 @@ async function isNumericInput(questionElement, driver) {
     }
     console.log("ValidateAnswer return value - ", answer);
     return answer;
+  }
+
+  function isAnswerValidForSelectInput(answer, optionsText) {
+    // Trim and normalize both answer and options for comparison
+    const normalizedAnswer = answer.trim();
+    const normalizedOptionsText = optionsText.map(option => option.trim());
+
+    // Check if the answer is part of the optionsText
+    const isValid = normalizedOptionsText.includes(normalizedAnswer);
+
+    console.log("isAnswerValidForSelectInput return value - ", isValid);
+    return isValid;
   }
 
 async function clickElement(element) {
@@ -463,7 +474,9 @@ async function handleApplyPopup(driver) {
                 const label = await question.findElement(By.css("label"));
                 questionText = await label.getText();
                 
+                console.log("\n*********");
                 await appendQuestionToFile(questionText, QUESTIONS_RECEIVED);
+                console.log("\n*********");
                 
                 if (!(await isValidQuestion(questionText))){
                     console.log("Invalid")
@@ -491,6 +504,8 @@ async function handleApplyPopup(driver) {
                 }
             }         
         
+            console.log("\nQuestion text - ",questionText);
+            console.log("");
             const selectElements = await question.findElements(By.css("select"));            
             if (selectElements.length>0){
                 console.log("Input type - Select! Question - ",questionText);
@@ -512,8 +527,18 @@ async function handleApplyPopup(driver) {
                  console.log("sending question: ",questionWithOptions)
                  
                  // Get the best option from ChatGPT
-                 const bestOption = await getChatCompletion(questionWithOptions);
+                 var bestOption = await getChatCompletion(questionWithOptions);
+                 
                  console.log("best option - ",bestOption);
+
+                 var isValid = isAnswerValidForSelectInput(bestOption, optionsText);
+                 
+                 while (!isValid){
+                    console.log("ChatGPT returned inValid answer, asking it again...")
+                    bestOption = await getChatCompletion(`Ensure answer is from the options provided. ${questionWithOptions}`);
+                    console.log("Answer received on second attempt- ",bestOption)
+                    isValid = isAnswerValidForSelectInput(bestOption, optionsText);
+                 }
                  
                  // Select the best option by its visible text
                  for (let option of options) {
@@ -526,17 +551,25 @@ async function handleApplyPopup(driver) {
             }
             else
             {
-                console.log("\n\n-----Checking input type");
+                console.log("\n\n----- Checking input type");
                 // Check if the input is a radio button or a text input
                 const inputType = await question.findElement(By.css("input")).getAttribute("type");
                 console.log("Input type - ",inputType)
                 
                 if (inputType === 'radio') {
                 
-                    // Find the radio button with the desired value and click it
-                    const answer  = await getChatCompletion("Please answer Yes or No: "+questionText);   
-                    console.log("\nRadio input - Question - ",questionText," answer - ",answer);
-                    const radioButton = await question.findElement(By.css(`input[value='${answer}']`));
+                    const fieldset = await question.findElement(By.css('fieldset')).catch(() => null);
+                    const options = await fieldset.findElements(By.css('input[type="radio"]'));
+                    const labels = await fieldset.findElements(By.css('label'));
+                    const optionsText = await Promise.all(labels.map(label => label.getText()));
+
+                    const questionWithOptions = `Question - ${questionText} | which of the following options is the most suitable ? Options: ${optionsText.join(', ')}`;
+
+                    console.log("Sending question with radio input options - ",questionWithOptions);
+                    const bestAnswer  = await getChatCompletion(questionWithOptions);   
+                    console.log("Answer received for radio input - ",bestAnswer);
+
+                    const radioButton = await question.findElement(By.css(`input[value='${bestAnswer}']`));
                 
                     console.log("About to click radio button")
                     try{
