@@ -54,3 +54,25 @@ Are you open to a hybrid job environment out of Ottawa, ON?
 54. Depuis combien d’années utilisez-vous Apache ?
 55. How many years of work experience do you have with PostgreSQL?
 56. How many years of work experience do you have with Databases?
+57. How many years of work experience do you have with SQL?
+58. How many years of work experience do you have with SQL Server Reporting Services (SSRS)?
+59. How many years of work experience do you have with SAS (Software)?
+60. How many years of Financial Services experience do you currently have?
+61. How many years of Banking experience do you currently have?
+62. Will you be able to commute on-site at least one day a week?
+Will you be able to commute on-site at least one day a week?
+64. How many years of work experience do you have with Salesforce.com?
+65. How many years of work experience do you have with Visual Studio?
+66. How many years of work experience do you have with Microsoft Visual Studio Code?
+67. How many years of work experience do you have with Microsoft Azure?
+68. How many years of work experience do you have with API Development?
+69. How many years of work experience do you have with Azure API Management?
+70. How many years of work experience do you have with ETL Tools?
+71. How many years of work experience do you have with Azure SQL?
+72. How many years of work experience do you have with Ruby?
+73. How many years of work experience do you have with Ruby on Rails?
+74. How many years of work experience do you have with GraphQL?
+75. Are you able to work in a hybrid capacity in Toronto, ON?
+Are you able to work in a hybrid capacity in Toronto, ON?
+77. Does your resume list all of the required skills needed for this position? Ruby, Ruby on Rails, GraphQL, AWS, API, will need to be displayed on your resume clearly to remain in consideration.
+Does your resume list all of the required skills needed for this position? Ruby, Ruby on Rails, GraphQL, AWS, API, will need to be displayed on your resume clearly to remain in consideration.
