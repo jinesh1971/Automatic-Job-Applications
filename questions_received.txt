@@ -76,3 +76,14 @@ Will you be able to commute on-site at least one day a week?
 Are you able to work in a hybrid capacity in Toronto, ON?
 77. Does your resume list all of the required skills needed for this position? Ruby, Ruby on Rails, GraphQL, AWS, API, will need to be displayed on your resume clearly to remain in consideration.
 Does your resume list all of the required skills needed for this position? Ruby, Ruby on Rails, GraphQL, AWS, API, will need to be displayed on your resume clearly to remain in consideration.
+79. How many years of work experience do you have with Spring Boot?
+80. How many years of work experience do you have with Next.js?
+81. How many years of work experience do you have with React.js?
+82. Are you aware this is a position for 6-months only for contractors?
+Are you aware this is a position for 6-months only for contractors?
+84. How many years of work experience do you have with Azure Databricks?
+85. How many years of work experience do you have with IBM Cognos Analytics?
+86. How many years of work experience do you have with Active Reports?
+87. How many years of work experience do you have with IBM Certified Developer?
+88. How many years of work experience do you have with Node.js?
+89. How many years of experience do you have with Amazon SNS ?

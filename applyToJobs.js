@@ -5,7 +5,7 @@ const util = require('util');
 const { OpenAI } = require('openai');
 require('dotenv').config();
 
-const JOB_COUNTER = 10;
+var JOB_COUNTER = 23;
 const JOB_LISTINGS_NOT_APPLIED = 'job_listings_not_applied.txt';
 const LOG_FILE = 'log_file.txt';
 const QUESTIONS_RECEIVED = 'questions_received.txt';
@@ -22,130 +22,157 @@ async function saveUrlToFile(url) {
 }
 
 async function applyToJobsWithEasyApply(driver) {
-    try {
-        console.log("Beginning of EasyToApply function, waiting 4 seconds");
-        await driver.sleep(4000);
-        let jobListings = await driver.findElements(By.css('li.jobs-search-results__list-item'));
-
-        console.log("Number of job listings found on page:", jobListings.length);
-
-        for (let i = 0; i < jobListings.length; i++) {
-            // Re-fetch the job listings before interacting to avoid stale element reference
-            jobListings = await driver.findElements(By.css('li.jobs-search-results__list-item'));
-
-            console.log("\nAbout to begin applying jobs, Wating 4 seconds");
+    while (true){
+        try {
+            console.log("Beginning of EasyToApply function, waiting 4 seconds");
             await driver.sleep(4000);
-            try {
-                await jobListings[i+JOB_COUNTER].click();
-                let jobTitleElement;
-                
-                try{
-                    jobTitleElement = await jobListings[i+JOB_COUNTER].findElement(By.css('a.job-card-list__title'));
-                    console.log("Waiting 5 seconds, i - ",i+JOB_COUNTER," Job title - ",await jobTitleElement.getText());
-                    await driver.sleep(5000);
-                }catch(err){
-                    console.log("Unable to get the job title , error - ",err);
-                    console.log("");
-                }
-            
-                let easyApplyButton;
+            let jobListings = await driver.findElements(By.css('li.jobs-search-results__list-item'));
 
+            console.log("Number of job listings found on page:", jobListings.length);
+
+            for (let i = 0; i < jobListings.length; i++) {
+                // Re-fetch the job listings before interacting to avoid stale element reference
+                jobListings = await driver.findElements(By.css('li.jobs-search-results__list-item'));
+
+                console.log("\nAbout to begin applying jobs, Wating 4 seconds");
+                await driver.sleep(4000);
                 try {
-                    await driver.wait(until.elementLocated(By.xpath("//button[contains(@aria-label, 'Easy Apply to')]")), 10000);
-                     easyApplyButton = await driver.findElement(By.xpath("//button[contains(@aria-label, 'Easy Apply to')]"));
-
-                } catch (error) {
-                    console.log("Job either applied or Easy button not available, Continuing with the next job. Waiting 2 seconds");
-                    await driver.sleep(2000);
-                    // Continue with the next job...
-                }
+                    await jobListings[i+JOB_COUNTER].click();
+                    let jobTitleElement;
+                    
+                    try{
+                        jobTitleElement = await jobListings[i+JOB_COUNTER].findElement(By.css('a.job-card-list__title'));
+                        console.log("Waiting 5 seconds, i - ",i+JOB_COUNTER," Job title - ",await jobTitleElement.getText());
+                        await driver.sleep(5000);
+                    }catch(err){
+                        console.log("Unable to get the job title , error - ",err);
+                        console.log("");
+                    }
                 
-                if (easyApplyButton){
-                    await easyApplyButton.click();
-                    console.log("Easy Apply button clicked.");
-            
-                    //Handle pop up for job application
-                    await handleApplyPopup(driver);
-                    
-                    if (NEED_REFRESH){
-                        // Refresh the browser
-                        await driver.navigate().refresh();
-                        NEED_REFRESH = false;
-                    }
+                    let easyApplyButton;
 
-                    console.log("About to click review button, waiting 7 seconds");
-
-                    let reviewButton;
                     try {
-                        reviewButton = await driver.findElement(By.xpath("/html/body/div[3]/div/div/div[2]/div/div[2]/form/footer/div[2]/button[2]"));
-                        await reviewButton.click();
-                        console.log("Review button clicked, waiting 2 seconds");
+                        await driver.wait(until.elementLocated(By.xpath("//button[contains(@aria-label, 'Easy Apply to')]")), 10000);
+                        easyApplyButton = await driver.findElement(By.xpath("//button[contains(@aria-label, 'Easy Apply to')]"));
+
+                    } catch (error) {
+                        console.log("Job either applied or Easy button not available, Continuing with the next job. Waiting 2 seconds");
                         await driver.sleep(2000);
-                    } catch (err) {
-                        console.log("Review button not found, skipping to submit button, error - ",err);
-                    }
-
-                    console.log("About to click submit button, waiting 2 seconds");
-                    await driver.sleep(2000);
-
-                  
-                    try {
-                        const locators = [
-                            By.xpath("//button[@aria-label='Submit application' and contains(@class, 'artdeco-button--primary')]"),
-                            By.xpath("//button[normalize-space() = 'Submit application']"),
-                            // By.css(".artdeco-button.artdeco-button--2.artdeco-button--primary"),
-                            By.xpath("//button[./span[text()='Submit application']]"),
-                            By.id("ember928")
-                        ];
-
-                        let elementFound = false;
-                        console.log("Running through locators");
-                        for (let locator of locators) {
-                            try {                            
-                                const submitButton = await driver.findElement(locator);
-                                await submitButton.click();
-                                elementFound = true;
-                                break; // Exit the loop if the element is found and clicked
-                            } catch (e) {
-                                // Continue to the next locator if this one fails
-                            }
-                        }
-                        if (!elementFound) {
-                            throw new Error("Failed to locate and click the submit button using all provided strategies.");
-                        }
-                    } catch (e) {
-                        console.error("error during submit button event",e);
+                        // Continue with the next job...
                     }
                     
-                    console.log("Submit button clicked, now going to click the afterSubmitCrossButton, waiting 3 seconds");
-                    await driver.sleep(3000);
-                    try {//ID, CSS selector, aria-label, class name, descendant XPath
-                        await afterSubmitCrossButton(driver,"ember464",".artdeco-modal__dismiss.artdeco-button--circle", "Dismiss", "artdeco-modal__dismiss", "//button[./svg[@data-test-icon='close-medium']]" );
-                        console.log("Cross after submit button clicked successfully");
-                    } catch(e) {
-                        console.log("error during clicking submitCrossButton- ",e)
+                    if (easyApplyButton){
+                        await easyApplyButton.click();
+                        console.log("Easy Apply button clicked.");
+                
+                        //Handle pop up for job application
+                        await handleApplyPopup(driver);
+                        
+                        if (NEED_REFRESH){
+                            // Refresh the browser
+                            await driver.navigate().refresh();
+                            NEED_REFRESH = false;
+                        }
+
+                        console.log("About to click review button, waiting 7 seconds");
+
+                        let reviewButton;
+                        try {
+                            reviewButton = await driver.findElement(By.xpath("/html/body/div[3]/div/div/div[2]/div/div[2]/form/footer/div[2]/button[2]"));
+                            await reviewButton.click();
+                            console.log("Review button clicked, waiting 2 seconds");
+                            await driver.sleep(2000);
+                        } catch (err) {
+                            console.log("Review button not found, skipping to submit button, error - ",err);
+                        }
+
+                        console.log("About to click submit button, waiting 2 seconds");
+                        await driver.sleep(2000);
+
+                    
+                        try {
+                            const locators = [
+                                By.xpath("//button[@aria-label='Submit application' and contains(@class, 'artdeco-button--primary')]"),
+                                By.xpath("//button[normalize-space() = 'Submit application']"),
+                                // By.css(".artdeco-button.artdeco-button--2.artdeco-button--primary"),
+                                By.xpath("//button[./span[text()='Submit application']]"),
+                                By.id("ember928")
+                            ];
+
+                            let elementFound = false;
+                            console.log("Running through locators");
+                            for (let locator of locators) {
+                                try {                            
+                                    const submitButton = await driver.findElement(locator);
+                                    await submitButton.click();
+                                    elementFound = true;
+                                    break; // Exit the loop if the element is found and clicked
+                                } catch (e) {
+                                    // Continue to the next locator if this one fails
+                                }
+                            }
+                            if (!elementFound) {
+                                throw new Error("Failed to locate and click the submit button using all provided strategies.");
+                            }
+                        } catch (e) {
+                            console.error("error during submit button event",e);
+                        }
+                        
+                        console.log("Submit button clicked, now going to click the afterSubmitCrossButton, waiting 8 seconds");
+                        await driver.sleep(3000);
+                        try {
+                            // Wait for any overlay to disappear before clicking the cross button
+                            await driver.wait(until.elementIsNotVisible(driver.findElement(By.css('.artdeco-modal-overlay'))), 5000);
+                            console.log("Overlay is no longer visible, proceeding to click the cross button");
+
+                            //ID, CSS selector, aria-label, class name, descendant XPath
+                            await afterSubmitCrossButton(driver,"ember464",".artdeco-modal__dismiss.artdeco-button--circle", "Dismiss", "artdeco-modal__dismiss", "//button[./svg[@data-test-icon='close-medium']]" );
+                            console.log("Cross after submit button clicked successfully");
+                        } catch(e) {
+                            console.log("error during clicking submitCrossButton- ",e)
+                        }
+
+                        //While testing
+                        // try{
+                        //     const crossButton = await driver.findElement(By.xpath("/html/body/div[3]/div/div/button"));
+                        //     crossButton.click();
+                        //     console.log("cross button clicked");
+                        // }
+                        // catch (err){
+                        //     console.log("Unable to click cross button, error - ", err)
+                        // }                    
+
+                        // await clickDismissButton(driver);
+                        console.log("Before proceeding to apply next job, waiting 4 seconds.");
+                        await driver.sleep(4000);
                     }
+                } catch (err) {
+                    console.log('Error while applying jobs', err);
+                }
 
-                    //While testing
-                    // try{
-                    //     const crossButton = await driver.findElement(By.xpath("/html/body/div[3]/div/div/button"));
-                    //     crossButton.click();
-                    //     console.log("cross button clicked");
-                    // }
-                    // catch (err){
-                    //     console.log("Unable to click cross button, error - ", err)
-                    // }                    
+                console.log("\nLooking for NEXT button\n");
 
-                    // await clickDismissButton(driver);
-                    console.log("Before proceeding to apply next job, waiting 4 seconds.");
-                    await driver.sleep(4000);
-                } 
-            } catch (err) {
-                console.log('Error while applying jobs', err);
+                let nextPageButton;
+                try {
+                    nextPageButton = await driver.findElement(By.css('button.jobs-search-pagination__button--next'));
+                } catch (error) {
+                    console.log('Next button not found, ending process.');
+                    break; // Exit the loop if "Next" button is not found
+                }
+
+                const isLastPage = await nextPageButton.getAttribute('disabled');
+                if (isLastPage) {
+                    console.log('Next button is disabled, indicating this is the last page, ending process.');
+                    break; // Exit the loop if "Next" button is disabled
+                }
+                console.log("Job counter reset");
+                JOB_COUNTER = 0;
+                await nextPageButton.click();
+                // await driver.wait(until.elementsLocated(By.css('li.jobs-search-results__list-item')), 10000);
             }
+        } catch (error) {
+            console.error('Error in apply jobs function, maybe in while loop', error);
         }
-    } catch (error) {
-        console.error('Error applying to jobs, in function  applyToJobsWithEasyApply', error);
     }
 }
 
