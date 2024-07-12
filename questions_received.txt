@@ -87,3 +87,37 @@ Are you aware this is a position for 6-months only for contractors?
 87. How many years of work experience do you have with IBM Certified Developer?
 88. How many years of work experience do you have with Node.js?
 89. How many years of experience do you have with Amazon SNS ?
+90. How many years of work experience do you have with Apache Airflow?
+91. How many years of work experience do you have with Data Pipelines?
+92. Are you able to go on-site to downtown Toronto twice a week?
+Are you able to go on-site to downtown Toronto twice a week?
+94. How many years of work experience do you have with Go (Programming Language)?
+95. What is your level of proficiency in French?
+What is your level of proficiency in French?
+97. Quel est votre niveau en Français ?
+Quel est votre niveau en Français ?
+99. Quel est votre niveau en Anglais ?
+Quel est votre niveau en Anglais ?
+101. How many years of work experience do you have with iOS Development?
+102. How many years of work experience do you have with Swift (Programming Language)?
+103. How many years of work experience do you have with SwiftUI?
+104. How many years of work experience do you have with TypeScript?
+105. How many years of work experience do you have with FastAPI?
+106. How many years of work experience do you have with Core Java?
+107. How many years of work experience do you have with Shell Scripting?
+108. Is it acceptable to you that the client expects the resources to be present onsite 3 times per week in Montreal?
+Is it acceptable to you that the client expects the resources to be present onsite 3 times per week in Montreal?
+110. How many years of work experience do you have with Redux.js?
+111. How many years of work experience do you have with User Experience (UX)?
+112. How many years of work experience do you have with Android?
+113. How many years of work experience do you have with GitHub?
+114. How many years of work experience do you have with Android Jetpack?
+115. How many years of work experience do you have with JavaScript?
+116. Your title
+117. Company
+118. I currently work here
+119. Dates of employment
+Dates of employment
+121. City
+City
+123. Description

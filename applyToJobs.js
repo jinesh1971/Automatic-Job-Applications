@@ -31,12 +31,22 @@ async function applyToJobsWithEasyApply(driver) {
             console.log("Number of job listings found on page:", jobListings.length);
 
             for (let i = 0; i < jobListings.length; i++) {
+
+                //Break out of loop, if counter is more than jobListings list length
+                if ((i+JOB_COUNTER) >= jobListings.length){
+                    console.log("JobListings.length - ",jobListings.length)
+                    console.log("[i+JOB_COUNTER] - ",i+JOB_COUNTER)
+                    console.log("Counter is more than available listings in for loop, breaking out...");
+                    break;
+                }
                 // Re-fetch the job listings before interacting to avoid stale element reference
                 jobListings = await driver.findElements(By.css('li.jobs-search-results__list-item'));
 
                 console.log("\nAbout to begin applying jobs, Wating 4 seconds");
                 await driver.sleep(4000);
                 try {
+                    console.log("JobListings.length - ",jobListings.length)
+                    console.log("[i+JOB_COUNTER] - ",i+JOB_COUNTER)
                     await jobListings[i+JOB_COUNTER].click();
                     let jobTitleElement;
                     
@@ -120,16 +130,44 @@ async function applyToJobsWithEasyApply(driver) {
                         
                         console.log("Submit button clicked, now going to click the afterSubmitCrossButton, waiting 8 seconds");
                         await driver.sleep(3000);
+                    
                         try {
-                            // Wait for any overlay to disappear before clicking the cross button
-                            await driver.wait(until.elementIsNotVisible(driver.findElement(By.css('.artdeco-modal-overlay'))), 5000);
-                            console.log("Overlay is no longer visible, proceeding to click the cross button");
+                            // Function to wait for any overlay to disappear
+                            async function waitForAllOverlaysToDisappear() {
+                                const overlaySelectors = [
+                                    By.css('.artdeco-modal-overlay.artdeco-modal-overlay--layer-default.artdeco-modal-overlay--is-top-layer'),
+                                    // Add any other known overlay selectors here
+                                ];
 
-                            //ID, CSS selector, aria-label, class name, descendant XPath
-                            await afterSubmitCrossButton(driver,"ember464",".artdeco-modal__dismiss.artdeco-button--circle", "Dismiss", "artdeco-modal__dismiss", "//button[./svg[@data-test-icon='close-medium']]" );
+                                let overlaysVisible = true;
+                                while (overlaysVisible) {
+                                    overlaysVisible = false;
+                                    for (let selector of overlaySelectors) {
+                                        try {
+                                            let overlays = await driver.findElements(selector);
+                                            for (let overlay of overlays) {
+                                                if (await overlay.isDisplayed()) {
+                                                    console.log(`Overlay with selector ${selector} is visible, waiting for it to disappear`);
+                                                    await driver.wait(until.elementIsNotVisible(overlay), 10000);  // Increased wait time
+                                                    console.log(`Overlay with selector ${selector} is no longer visible`);
+                                                    overlaysVisible = true;  // If any overlay is visible, continue the loop
+                                                }
+                                            }
+                                        } catch (overlayError) {
+                                            console.log(`Overlay with selector ${selector} not found or already invisible`, overlayError);
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Wait for all overlays to disappear
+                            await waitForAllOverlaysToDisappear();
+
+                            // Now try to click the afterSubmitCrossButton
+                            await afterSubmitCrossButton(driver, "ember464", ".artdeco-modal__dismiss.artdeco-button--circle", "Dismiss", "artdeco-modal__dismiss", "//button[./svg[@data-test-icon='close-medium']]");
                             console.log("Cross after submit button clicked successfully");
-                        } catch(e) {
-                            console.log("error during clicking submitCrossButton- ",e)
+                        } catch (e) {
+                            console.log("Error during clicking submitCrossButton- ", e);
                         }
 
                         //While testing
@@ -149,8 +187,8 @@ async function applyToJobsWithEasyApply(driver) {
                 } catch (err) {
                     console.log('Error while applying jobs', err);
                 }
-
-                console.log("\nLooking for NEXT button\n");
+            }
+                 console.log("\n Outside of loop of listings, Looking for NEXT page button\n");
 
                 let nextPageButton;
                 try {
@@ -169,7 +207,6 @@ async function applyToJobsWithEasyApply(driver) {
                 JOB_COUNTER = 0;
                 await nextPageButton.click();
                 // await driver.wait(until.elementsLocated(By.css('li.jobs-search-results__list-item')), 10000);
-            }
         } catch (error) {
             console.error('Error in apply jobs function, maybe in while loop', error);
         }
