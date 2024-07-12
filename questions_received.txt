@@ -1,123 +1,171 @@
-2. Depuis combien d’années utilisez-vous Java ?
-2. Depuis combien d’années utilisez-vous JIRA ?
-3. Depuis combien d’années utilisez-vous Framework Spring ?
-4. Oui
-5. Quel est votre niveau en Français ?
-6. How many years of work experience do you have with C++?
-7. How many years of work experience do you have with Embedded C++?
-8. How many years of work experience do you have with Agile Environment?
-9. How many years of work experience do you have with Jakarta EE?
-10. Yes
-11. How many years of work experience do you have with OnBase API and API integration?
-12. How many years of work experience do you have with OnBase ECM?
-13. How many years of work experience do you have with Microservice Architecture and designing Microservices for event-based solutions?
-14. How many years of work experience do you have with Java J2EE Application Development?
-15. How many years of work experience do you have with Cloud Deployments and Application Integration?
-16. How many years of work experience do you have with different Cloud Platforms like Microsoft Azure/Google Cloud Platform (GCP)/Amazon Web Services (AWS)?
-17. How many years of work experience do you have with .NET Application Development / .NET Framework?
-18. How many years of work experience do you have with End-to-End SDLC, including go-live and post-production software/application support?
-19. Depuis combien d’années utilisez-vous Spring Boot ?
-20. Depuis combien d’années utilisez-vous Amazon Web Services ?
-21. Quel est votre niveau en Français ?
-22. Présence au bureau 2 jours semaine à Montréal ?
-27. How many years of work experience do you have with Snowflake Cloud?
-28. How many years of work experience do you have with Google Cloud Platform (GCP)?
-29. How many years of work experience do you have with Amazon Web Services (AWS)?
-30. How many years of work experience do you have with AUTOSAR?
-31. How many years of work experience do you have with MATLAB?
-32. How many years of work experience do you have with Simulink?
-33. How many years of work experience do you have with Linux?
-34. How many years of work experience do you have with Operating Systems?
-35. How many years of work experience do you have with Python (Programming Language)?
-36. Are you legally entitled to work in Canada?
-Are you legally entitled to work in Canada?
-38. What are your hourly rate expectations?
-What are your hourly rate expectations?
-40. Are you open to a 12-month contract structure?
-Are you open to a 12-month contract structure?
-42. Are you willing to complete an online IKM Assessment as a mandatory portion of the application process (usually takes 1hr-1.5hrs to complete)? It is an Embedded C multiple choice test.
-Are you willing to complete an online IKM Assessment as a mandatory portion of the application process (usually takes 1hr-1.5hrs to complete)? It is an Embedded C multiple choice test.
-44. Are you open to a hybrid job environment out of Ottawa, ON?
-Are you open to a hybrid job environment out of Ottawa, ON?
-46. How many years of work experience do you have with SQL Server Integration Services (SSIS)?
-47. How many years of work experience do you have with Performance Tuning?
-48. How many years of work experience do you have with Guidewire?
-49. How many years of work experience do you have with Java?
-50. Depuis combien d’années utilisez-vous DevOps ?
-51. Quel est votre niveau en Français ?
-52. Quel est votre niveau en Anglais ?
-49. Depuis combien d’années utilisez-vous COBOL ?
-50. Combien d’années d’expérience avez-vous en tant que Technologies de l’information ?
-51. How many years of work experience do you have with Spring Framework?
-52. How many years of work experience do you have with Angular?
-53. Depuis combien d’années utilisez-vous Microservices ?
-54. Depuis combien d’années utilisez-vous Apache ?
-55. How many years of work experience do you have with PostgreSQL?
-56. How many years of work experience do you have with Databases?
-57. How many years of work experience do you have with SQL?
-58. How many years of work experience do you have with SQL Server Reporting Services (SSRS)?
-59. How many years of work experience do you have with SAS (Software)?
-60. How many years of Financial Services experience do you currently have?
-61. How many years of Banking experience do you currently have?
-62. Will you be able to commute on-site at least one day a week?
-Will you be able to commute on-site at least one day a week?
-64. How many years of work experience do you have with Salesforce.com?
-65. How many years of work experience do you have with Visual Studio?
-66. How many years of work experience do you have with Microsoft Visual Studio Code?
-67. How many years of work experience do you have with Microsoft Azure?
-68. How many years of work experience do you have with API Development?
-69. How many years of work experience do you have with Azure API Management?
-70. How many years of work experience do you have with ETL Tools?
-71. How many years of work experience do you have with Azure SQL?
-72. How many years of work experience do you have with Ruby?
-73. How many years of work experience do you have with Ruby on Rails?
-74. How many years of work experience do you have with GraphQL?
-75. Are you able to work in a hybrid capacity in Toronto, ON?
+Depuis combien d’années utilisez-vous Java ?
+	•	Depuis combien d’années utilisez-vous JIRA ?
+	•	Depuis combien d’années utilisez-vous Framework Spring ?
+	•	Quel est votre niveau en Français ?
+	•	How many years of work experience do you have with C++?
+	•	How many years of work experience do you have with Embedded C++?
+	•	How many years of work experience do you have with Agile Environment?
+	•	How many years of work experience do you have with Jakarta EE?
+	•	How many years of work experience do you have with OnBase API and API integration?
+	•	How many years of work experience do you have with OnBase ECM?
+	•	How many years of work experience do you have with Microservice Architecture and designing Microservices for event-based solutions?
+	•	How many years of work experience do you have with Java J2EE Application Development?
+	•	How many years of work experience do you have with Cloud Deployments and Application Integration?
+	•	How many years of work experience do you have with different Cloud Platforms like Microsoft Azure/Google Cloud Platform (GCP)/Amazon Web Services (AWS)?
+	•	How many years of work experience do you have with .NET Application Development / .NET Framework?
+	•	How many years of work experience do you have with End-to-End SDLC, including go-live and post-production software/application support?
+	•	Depuis combien d’années utilisez-vous Spring Boot ?
+	•	Depuis combien d’années utilisez-vous Amazon Web Services ?
+	•	Présence au bureau 2 jours semaine à Montréal ?
+	•	How many years of work experience do you have with Snowflake Cloud?
+	•	How many years of work experience do you have with Google Cloud Platform (GCP)?
+	•	How many years of work experience do you have with Amazon Web Services (AWS)?
+	•	How many years of work experience do you have with AUTOSAR?
+	•	How many years of work experience do you have with MATLAB?
+	•	How many years of work experience do you have with Simulink?
+	•	How many years of work experience do you have with Linux?
+	•	How many years of work experience do you have with Operating Systems?
+	•	How many years of work experience do you have with Python (Programming Language)?
+	•	Are you legally entitled to work in Canada?
+	•	What are your hourly rate expectations?
+	•	Are you open to a 12-month contract structure?
+	•	Are you willing to complete an online IKM Assessment as a mandatory portion of the application process (usually takes 1hr-1.5hrs to complete)? It is an Embedded C multiple choice test.
+	•	Are you open to a hybrid job environment out of Ottawa, ON?
+	•	How many years of work experience do you have with SQL Server Integration Services (SSIS)?
+	•	How many years of work experience do you have with Performance Tuning?
+	•	How many years of work experience do you have with Guidewire?
+	•	How many years of work experience do you have with Java?
+	•	Depuis combien d’années utilisez-vous DevOps ?
+	•	Quel est votre niveau en Anglais ?
+	•	Depuis combien d’années utilisez-vous COBOL ?
+	•	Combien d’années d’expérience avez-vous en tant que Technologies de l’information ?
+	•	How many years of work experience do you have with Spring Framework?
+	•	How many years of work experience do you have with Angular?
+	•	Depuis combien d’années utilisez-vous Microservices ?
+	•	Depuis combien d’années utilisez-vous Apache ?
+	•	How many years of work experience do you have with PostgreSQL?
+	•	How many years of work experience do you have with Databases?
+	•	How many years of work experience do you have with SQL?
+	•	How many years of work experience do you have with SQL Server Reporting Services (SSRS)?
+	•	How many years of work experience do you have with SAS (Software)?
+	•	How many years of Financial Services experience do you currently have?
+	•	How many years of Banking experience do you currently have?
+	•	Will you be able to commute on-site at least one day a week?
+	•	How many years of work experience do you have with Salesforce.com?
+	•	How many years of work experience do you have with Visual Studio?
+	•	How many years of work experience do you have with Microsoft Visual Studio Code?
+	•	How many years of work experience do you have with Microsoft Azure?
+	•	How many years of work experience do you have with API Development?
+	•	How many years of work experience do you have with Azure API Management?
+	•	How many years of work experience do you have with ETL Tools?
+	•	How many years of work experience do you have with Azure SQL?
+	•	How many years of work experience do you have with Ruby?
+	•	How many years of work experience do you have with Ruby on Rails?
+	•	How many years of work experience do you have with GraphQL?
+	•	Are you able to work in a hybrid capacity in Toronto, ON?
+	•	Does your resume list all of the required skills needed for this position? Ruby, Ruby on Rails, GraphQL, AWS, API, will need to be displayed on your resume clearly to remain in consideration.
+	•	How many years of work experience do you have with Spring Boot?
+	•	How many years of work experience do you have with Next.js?
+	•	How many years of work experience do you have with React.js?
+	•	Are you aware this is a position for 6-months only for contractors?
+	•	How many years of work experience do you have with Azure Databricks?
+	•	How many years of work experience do you have with IBM Cognos Analytics?
+	•	How many years of work experience do you have with Active Reports?
+	•	How many years of work experience do you have with IBM Certified Developer?
+	•	How many years of work experience do you have with Node.js?
+	•	How many years of experience do you have with Amazon SNS ?
+	•	How many years of work experience do you have with Apache Airflow?
+	•	How many years of work experience do you have with Data Pipelines?
+	•	Are you able to go on-site to downtown Toronto twice a week?
+	•	How many years of work experience do you have with Go (Programming Language)?
+	•	What is your level of proficiency in French?
+	•	How many years of work experience do you have with iOS Development?
+	•	How many years of work experience do you have with Swift (Programming Language)?
+	•	How many years of work experience do you have with SwiftUI?
+	•	How many years of work experience do you have with TypeScript?
+	•	How many years of work experience do you have with FastAPI?
+	•	How many years of work experience do you have with Core Java?
+	•	How many years of work experience do you have with Shell Scripting?
+	•	Is it acceptable to you that the client expects the resources to be present onsite 3 times per week in Montreal?
+	•	How many years of work experience do you have with Redux.js?
+	•	How many years of work experience do you have with User Experience (UX)?
+	•	How many years of work experience do you have with Android?
+	•	How many years of work experience do you have with GitHub?
+	•	How many years of work experience do you have with Android Jetpack?
+	•	How many years of work experience do you have with JavaScript?
+96. Yes
+97. Are you aware that this is a 3 month project?
+Are you aware that this is a 3 month project?
+99. Are you incorporated?
+Are you incorporated?
+101. How many years of work experience do you have with Quality Assurance?
+102. How many years of work experience do you have with Fixed-Income Investing?
+103. How many years of Quality Assurance experience do you currently have?
+104. How many years of Information Technology experience do you currently have?
+105. Are you having experience in Retail or e-commence company? 
+Are you having experience in Retail or e-commence company?
+107. Are you located in Vancouver - Canada? 
+Are you located in Vancouver - Canada?
+109. Are you aware that this is a 3 month project?
+Are you aware that this is a 3 month project?
+111. Are you incorporated?
+Are you incorporated?
+113. How many years of work experience do you have with Kotlin?
+114. How many years of work experience do you have with Bootstrap (Framework)?
+115. How many years of work experience do you have with AJAX?
+116. How many years of work experience do you have with ASP.NET?
+117. How many years of work experience do you have with ServiceNow?
+118. How many years of work experience do you have with IT Security Operations?
+119. How many years of work experience do you have with Cyber Risk Management?
+120. 5+ years’ experience in support IT to install and setup relevant software/apps/technologies and check the dependencies.
+121. check Tenable vulnerabilities and address issues if needed in Linux
+check Tenable vulnerabilities and address issues if needed in Linux
+123. Expertise in conducting manual tests and system tests. (Docker, Python, PostgreSQL & other DB)
+124. Recent proven experience in creating and config new dockers with Python 3.
+125. Are you able to work in a hybrid capacity in Toronto, ON?
 Are you able to work in a hybrid capacity in Toronto, ON?
-77. Does your resume list all of the required skills needed for this position? Ruby, Ruby on Rails, GraphQL, AWS, API, will need to be displayed on your resume clearly to remain in consideration.
+127. Does your resume list all of the required skills needed for this position? Ruby, Ruby on Rails, GraphQL, AWS, API, will need to be displayed on your resume clearly to remain in consideration.
 Does your resume list all of the required skills needed for this position? Ruby, Ruby on Rails, GraphQL, AWS, API, will need to be displayed on your resume clearly to remain in consideration.
-79. How many years of work experience do you have with Spring Boot?
-80. How many years of work experience do you have with Next.js?
-81. How many years of work experience do you have with React.js?
-82. Are you aware this is a position for 6-months only for contractors?
-Are you aware this is a position for 6-months only for contractors?
-84. How many years of work experience do you have with Azure Databricks?
-85. How many years of work experience do you have with IBM Cognos Analytics?
-86. How many years of work experience do you have with Active Reports?
-87. How many years of work experience do you have with IBM Certified Developer?
-88. How many years of work experience do you have with Node.js?
-89. How many years of experience do you have with Amazon SNS ?
-90. How many years of work experience do you have with Apache Airflow?
-91. How many years of work experience do you have with Data Pipelines?
-92. Are you able to go on-site to downtown Toronto twice a week?
-Are you able to go on-site to downtown Toronto twice a week?
-94. How many years of work experience do you have with Go (Programming Language)?
-95. What is your level of proficiency in French?
-What is your level of proficiency in French?
-97. Quel est votre niveau en Français ?
+129. How many years of work experience do you have with Site Reliability Engineering?
+130. How many years of work experience do you have with Splunk?
+131. How many years of work experience do you have with DevOps?
+132. How many years of work experience do you have with Apache Cordova?
+133. How many years of work experience do you have with Java J2EE Application Development?
+How many years of work experience do you have with Java J2EE Application Development?
+135. How many years of work experience do you have with OnBase Unity API and API integration?
+136. How many years of work experience do you have with SharePoint?
+137. SharePoint migrations tools and SharePoint PS Scripting
+SharePoint migrations tools and SharePoint PS Scripting
+139. How many years of work experience do you have with Amazon Simple Notification Service (SNS)?
+140. Overall how many years of IT experience do you currently have?
+141. How many years of experience do you have as a Software Developer?
+142. How many years of experience do you have working in IT?
+143. How many years of experience do you have working with Agile, Cloud and DevOps?
+144. How many years of experience do you have with Microsoft Stack?
+145. How many years of experience do you have working with frontend development?
+146. How many years of experience do you have working with complex enterprise scale environments?
+147. How many years of experience do you have testing code?
+148. Are you located in the lower mainland?
+Are you located in the lower mainland?
+150. Are you willing to work a hybrid job environment out of Ottawa, ON?
+Are you willing to work a hybrid job environment out of Ottawa, ON?
+152. Are you open to a 12-month contract structure?
+Are you open to a 12-month contract structure?
+154. Are you open to completing a Python 3 Programming IKM Assessment as a mandatory part of the interview process? (Note: it is a multiple choice assessment that usually takes 1hr-2hrs to complete)
+Are you open to completing a Python 3 Programming IKM Assessment as a mandatory part of the interview process? (Note: it is a multiple choice assessment that usually takes 1hr-2hrs to complete)
+156. How many years of work experience do you have with Data Migration?
+157. How many years of work experience do you have with Microsoft Power BI?
+158. How many years of developing experience for multiple OS architectures (like, Linux and QNX) do you have?
+159. How many years of experience do you have working with multiple hardware variants (configuration, bring up, etc)?
+160. How many years of Embedded Development and/or cross platform development experience do you have?
+161. How would you rate your C/C++ coding expertise on 0-to-10 scale? (10 is an expert level)
+162. Can you commit to work at least 3d per week in the office/lab in Ottawa? 
+Can you commit to work at least 3d per week in the office/lab in Ottawa?
+164. Do your rate expectations align to 65-85/h ($/hr, incorporated) range? 
+Do your rate expectations align to 65-85/h ($/hr, incorporated) range?
+166. How many years of work experience do you have with REST APIs?
+167. Quel est votre niveau en Français ?
 Quel est votre niveau en Français ?
-99. Quel est votre niveau en Anglais ?
+169. Quel est votre niveau en Anglais ?
 Quel est votre niveau en Anglais ?
-101. How many years of work experience do you have with iOS Development?
-102. How many years of work experience do you have with Swift (Programming Language)?
-103. How many years of work experience do you have with SwiftUI?
-104. How many years of work experience do you have with TypeScript?
-105. How many years of work experience do you have with FastAPI?
-106. How many years of work experience do you have with Core Java?
-107. How many years of work experience do you have with Shell Scripting?
-108. Is it acceptable to you that the client expects the resources to be present onsite 3 times per week in Montreal?
-Is it acceptable to you that the client expects the resources to be present onsite 3 times per week in Montreal?
-110. How many years of work experience do you have with Redux.js?
-111. How many years of work experience do you have with User Experience (UX)?
-112. How many years of work experience do you have with Android?
-113. How many years of work experience do you have with GitHub?
-114. How many years of work experience do you have with Android Jetpack?
-115. How many years of work experience do you have with JavaScript?
-116. Your title
-117. Company
-118. I currently work here
-119. Dates of employment
-Dates of employment
-121. City
-City
-123. Description
+171. Oui
